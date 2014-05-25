@@ -13,7 +13,7 @@ $html = <<< EOL
         <title></title>
         
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-        <link rel="stylesheet" href="../css/mapCss.css" type="text/css" />
+        <link rel="stylesheet" href="../css/mapCss4.css" type="text/css" />
         <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAXoyzE3QfIexjkyJz9T9WSgMCMtoXK2Ok&sensor=true">
         </script>
@@ -22,16 +22,17 @@ $html = <<< EOL
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
         <script type="text/javascript" src="../js/mapJs.js"></script>
         <script type="text/javascript">
+        
+        function allClicked(form){
+            
+        }
+        
             function onBaloonclicked(){
-                document.getElementById("selectFile").style.display="inline";
-            }
+                document.getElementById("all").style.display="inline";
+   }
             var markersArray = [];
             var map = null;
-            var latitude;
-            var longitude;
             var successCallback = function(position2) {
-                latitude = position2.coords.latitude;
-                longitude = position2.coords.longitude;
                 var latlng = new google.maps.LatLng(position2.coords.latitude, position2.coords.longitude);
                 map.setCenter(latlng);
                 google.maps.event.addListener(map, 'click', function(event) {
@@ -57,12 +58,51 @@ $html = <<< EOL
             function initialize() {
                 var mapOptions = {
                     center: new google.maps.LatLng(-34.397, 150.644),
-                    zoom: 17,
+                    zoom: 12,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
                 map = new google.maps.Map(document.getElementById("map_canvas"),
                         mapOptions);
-
+        
+                map.set('styles', [
+  {
+    stylers: [
+      { hue: '#00ffe6' },
+     ]
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [
+      { color: '#33B5E5' },
+      { visibility: 'off' }
+    ]
+  },{
+    featureType: 'transit',
+    elementType: 'all',
+    stylers: [
+      { visibility: 'off' }
+    ]
+  }, {
+    featureType: 'road',
+    elementType: 'labels',
+    stylers: [
+      { visibility: 'off' }
+    ]
+  },{
+  featureType: 'landscape',
+  elementType: 'label',
+  stylers: [
+    { visibility: 'off' }
+  ]
+}, {
+        featureType: 'poi',
+        elementType: 'label',
+        stylers: [
+            { visibility: 'off' }
+        ]
+    }
+]);
                 if (typeof (navigator.geolocation) == 'undefined') {
                     geolocation = google.gears.factory.create('beta.geolocation');
                 } else {
@@ -97,7 +137,7 @@ $html.=<<< EOL
             function createMarker(latlng,name,map)
             {
                 var infoWindow = new google.maps.InfoWindow();
-                var marker = new google.maps.Marker({position: latlng,map: map});
+                var marker = new google.maps.Marker({position: latlng,map: map,icon: 'http://www52.atpages.jp/~atserver/CatchTheLaugh/icon/cam.png'});
                 google.maps.event.addListener(marker, 'click', function() {
                     infoWindow.setContent(name);
                     infoWindow.open(map,marker);   
@@ -105,8 +145,8 @@ $html.=<<< EOL
             } 
         
             function placeMarker(location) {
-                latitude = location.latitude;
-                longitude = location.longitude;
+                document.getElementById('latitude').value = location.lat();
+                document.getElementById('longitude').value = location.lng();
                 var clickedLocation = new google.maps.LatLng(location);
                 var marker = new google.maps.Marker({
                     position: location,
@@ -126,14 +166,12 @@ $html.=<<< EOL
             }
         
             function upload(form){
-                document.getElementById('lat').value = latitude;
-                document.getElementById('lon').value = longitude;
 EOL;
                 $html.='$form = '."$('#upload-form');";
                 $html.='fd = new FormData($form[0]);';
 $html.=<<<EOL
                 $.ajax(
-                        'http://localhost/CatchTheLaugh/api/upload.php',
+                        'http://www52.atpages.jp/~atserver/CatchTheLaugh/api/upload.php',
                 {
                     type: 'post',
                     processData: false,
@@ -154,20 +192,30 @@ $html.=<<<EOL
         </script>
     </head>
     <body onLoad="initialize()">
+        <div id="all" class="all" style="width:100%; height:100%">
         <div id="selectFile">
             <form id="upload-form" method="post" enctype="multipart/form-data" onSubmit="return upload(this);">
                 <input type='file' id='file' name='file'/>
                 <input type='submit' value='submit'/>
-                <input type='hidden' id='lat' name='lat'/>
-                <input type='hidden' id='lon' name='lon'/>
+                <input type='textarea' id='comment' name='comment'/>
+                <input type='hidden' id='latitude' name='latitude'/>
+                <input type='hidden' id='longitude' name='longitude'/>
                 <input type='hidden' id='username' name='username' value='$id'/>
             </form>
-            <input type='textarea' id='idtext' readonly="readonly"/>
+        </div>
         </div>
         <div id="map_canvas" style="width:100%; height:100%"></div>
         <script>
+        /*
             var id = getData();
             document.getElementById("idtext").value=id;
+        */
+            /*document.getElementsByTagName("DIV")[0].addEventListener("click", function(e){*/
+            document.getElementById("all").addEventListener("click", function(e){
+                if(e.target.className == 'all'){
+                document.getElementById("all").style.display="none";
+            }
+   });
         </script>
     </body>
 </html>           

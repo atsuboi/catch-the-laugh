@@ -5,11 +5,11 @@ function get_login_info($id, $getdata, $pw){
     $select = <<< EOL
     select groupID from mst_group where groupID = %s and groupPW = '%s';      
 EOL;
-    $link = mysql_connect('localhost', 'root');
+    $link = mysql_connect('localhost', 'atserver', 'FXFVcV2M5bfxdy');
     if(!$link){
-        die("not linked");
+        die("not linkedllll");
     }
-    mysql_select_db('map_db', $link);
+    mysql_select_db('db0atserver', $link);
     $result = mysql_query(sprintf($select, $getdata, $pw), $link);
     if(!$result){
 //        mysql_close($link);
@@ -40,18 +40,25 @@ EOL;
     return $userId;
 }
 
-function insert_post_data($path, $lat, $lon, $userId){
+function insert_post_data($path, $lat, $lon, $userId, $comment){
     $insert = <<< EOL
     insert into tbl_image(imagePath, userID, lat, lon, groupID) select '$path', $userId, $lat, $lon, groupId from mst_user where userID=$userId;        
 EOL;
     
-    $link = mysql_connect('localhost', 'root');
+    $link = mysql_connect('localhost', 'atserver', 'FXFVcV2M5bfxdy');
     
-    mysql_select_db('map_db', $link);
+    mysql_select_db('db0atserver', $link);
     
     $result = mysql_query($insert, $link);
+    
+    $insert = <<< EOL
+            insert into tbl_comment (comment, imageId) select '$comment', max(imageId) from tbl_image where 
+            userId=$userId and imagePath='$path';
+EOL;
+    $result = mysql_query($insert, $link);
+    
     if(!$result){
-        die("error");
+        die("error".$insert.$result);
     }
     mysql_close($link);
 }
@@ -63,9 +70,9 @@ function get_image_list($id){
             where tbl_image.groupId=$id;
 EOL;
     
-    $link = mysql_connect('localhost', 'root');
+    $link = mysql_connect('localhost', 'atserver', 'FXFVcV2M5bfxdy');
     
-    mysql_select_db('map_db', $link);
+    mysql_select_db('db0atserver', $link);
     
     $result = mysql_query($select, $link);
     if(!$result){
