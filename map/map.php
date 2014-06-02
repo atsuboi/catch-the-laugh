@@ -143,7 +143,8 @@ EOL;
     if($rows){
         while($row = mysql_fetch_array($result)) {
             $src = '"'.$row['imagePath'].'"';
-            $html.="['".$row['userName']."<br/><img src=".$src.">',".$row['lat'].",".$row['lon']."],";
+            $size = 'style="max-width: 200px; max-height: 200px"';
+            $html.="['".$row['userName']."<br/><img src=".$src." $size>',".$row['lat'].",".$row['lon']."],";
         }
     }
 $html.=<<< EOL
