@@ -13,7 +13,7 @@ $html = <<< EOL
         <title></title>
         
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-        <link rel="stylesheet" href="../css/mapCss4.css" type="text/css" />
+        <link rel="stylesheet" href="../css/mapCss0.css" type="text/css" />
         <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAXoyzE3QfIexjkyJz9T9WSgMCMtoXK2Ok&sensor=true">
         </script>
@@ -66,16 +66,20 @@ $html = <<< EOL
         
                 map.set('styles', [
   {
-    stylers: [
-      { hue: '#00ffe6' },
-     ]
-  },
+        stylers: [
+        {hue: '#00d4ff'},
+  { saturation: 60 },
+  { lightness: -20 },
+  { gamma: 1.51 }
+            ]
+      
+   },
   {
     featureType: 'road',
     elementType: 'geometry',
     stylers: [
-      { color: '#33B5E5' },
-      { visibility: 'off' }
+      { color: '#ffffff' },
+      { visibility: 'on' }
     ]
   },{
     featureType: 'transit',
@@ -90,8 +94,24 @@ $html = <<< EOL
       { visibility: 'off' }
     ]
   },{
-  featureType: 'landscape',
+        featureType: 'landscape.natural',
+  elementType: 'geometry',
+  stylers: [
+    { color: '#ecf0f1' }
+  ]
+        
+        },
+        
+  {
+  featureType: 'landscape.man_made',
   elementType: 'label',
+  stylers: [
+    { visibility: 'on' }
+  ]
+},     
+  {
+  featureType: 'landscape.man_made',
+  elementType: 'geometry',
   stylers: [
     { visibility: 'off' }
   ]

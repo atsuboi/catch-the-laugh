@@ -36,6 +36,9 @@ EOL;
     }
     $row = mysql_fetch_assoc($result);
     $userId = $row['userID'];
+    if($userId === ""){
+        return false;
+    }
     mysql_close($link);
     return $userId;
 }
