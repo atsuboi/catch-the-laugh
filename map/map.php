@@ -13,7 +13,7 @@ $html = <<< EOL
         <title></title>
         
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-        <link rel="stylesheet" href="../css/mapCss0.css" type="text/css" />
+        <link rel="stylesheet" href="../css/mapCss1.css" type="text/css" />
         <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAXoyzE3QfIexjkyJz9T9WSgMCMtoXK2Ok&sensor=true">
         </script>
